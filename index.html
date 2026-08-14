@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0f172a">
+
+  <title>NKL | Nakliye</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+      background: #f6f8fb;
+      color: #0f172a;
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    .app {
+      max-width: 520px;
+      min-height: 100vh;
+      margin: 0 auto;
+      background: #ffffff;
+    }
+
+    .header {
+      padding: 24px 22px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #eef1f5;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+    }
+
+    .logo {
+      width: 42px;
+      height: 42px;
+      border-radius: 13px;
+      background: #0f172a;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      letter-spacing: -1px;
+    }
+
+    .brand-name {
+      font-size: 17px;
+      font-weight: 750;
+    }
+
+    .brand-sub {
+      font-size: 12px;
+      color: #64748b;
+      margin-top: 2px;
+    }
+
+    .status {
+      font-size: 12px;
+      color: #15803d;
+      background: #f0fdf4;
+      padding: 7px 10px;
+      border-radius: 20px;
+      font-weight: 600;
+    }
+
+    .page {
+      display: none;
+      padding: 28px 22px 40px;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    .hero {
+      margin-bottom: 30px;
+    }
+
+    .hero h1 {
+      font-size: 31px;
+      line-height: 1.12;
+      letter-spacing: -1.2px;
+      margin-bottom: 12px;
+    }
+
+    .hero p {
+      color: #64748b;
+      line-height: 1.6;
+      font-size: 15px;
+      max-width: 390px;
+    }
+
+    .main-action {
+      width: 100%;
+      border: none;
+      background: #0f172a;
+      color: #ffffff;
+      border-radius: 18px;
+      padding: 20px;
+      text-align: left;
+      cursor: pointer;
+      margin-bottom: 13px;
+      transition: 0.15s;
+    }
+
+    .main-action:active {
+      transform: scale(0.99);
+    }
+
+    .action-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .arrow {
+      font-size: 23px;
+      font-weight: 300;
+    }
+
+    .action-description {
+      margin-top: 7px;
+      font-size: 13px;
+      color: #cbd5e1;
+      line-height: 1.4;
+    }
+
+    .secondary-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .secondary-action {
+      border: 1px solid #e5eaf0;
+      background: #ffffff;
+      border-radius: 17px;
+      padding: 18px;
+      text-align: left;
+      cursor: pointer;
+      min-height: 116px;
+    }
+
+    .secondary-action .icon {
+      font-size: 23px;
+      margin-bottom: 17px;
+    }
+
+    .secondary-action strong {
+      display: block;
+      font-size: 15px;
+      margin-bottom: 5px;
+    }
+
+    .secondary-action span {
+      font-size: 12px;
+      line-height: 1.4;
+      color: #64748b;
+    }
+
+    .trust {
+      margin-top: 30px;
+      border-top: 1px solid #eef1f5;
+      padding-top: 22px;
+      color: #64748b;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .trust strong {
+      color: #334155;
+    }
+
+    .back {
+      border: none;
+      background: none;
+      padding: 0;
+      color: #475569;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 26px;
+      font-size: 14px;
+    }
+
+    .form-title {
+      font-size: 27px;
+      letter-spacing: -0.7px;
+      margin-bottom: 8px;
+    }
+
+    .form-subtitle {
+      color: #64748b;
+      line-height: 1.5;
+      font-size: 14px;
+      margin-bottom: 27px;
+    }
+
+    .field {
+      margin-bottom: 17px;
+    }
+
+    .field label {
+      display: block;
+      font-size: 13px;
+      color: #475569;
+      font-weight: 650;
+      margin-bottom: 7px;
+    }
+
+    .field input,
+    .field select {
+      width: 100%;
+      height: 52px;
+      border: 1px solid #dce2e9;
+      border-radius: 13px;
+      padding: 0 14px;
+      outline: none;
+      background: #ffffff;
+      color: #0f172a;
+    }
+
+    .field input:focus,
+    .field select:focus {
+      border-color: #64748b;
+    }
+
+    .route {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 11px;
+    }
+
+    .submit {
+      margin-top: 9px;
+      width: 100%;
+      height: 56px;
+      border: none;
+      border-radius: 15px;
+      background: #0f172a;
+      color: white;
+      font-weight: 750;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .small-note {
+      text-align: center;
+      color: #94a3b8;
+      font-size: 11px;
+      margin-top: 13px;
+      line-height: 1.5;
+    }
+
+    .success {
+      display: none;
+      text-align: center;
+      padding: 45px 10px 20px;
+    }
+
+    .success-icon {
+      width: 68px;
+      height: 68px;
+      border-radius: 50%;
+      background: #ecfdf5;
+      color: #15803d;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 22px;
+      font-size: 30px;
+    }
+
+    .success h2 {
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+
+    .success p {
+      color: #64748b;
+      line-height: 1.6;
+      font-size: 14px;
+    }
+
+    .demo-box {
+      margin-top: 25px;
+      padding: 20px;
+      border: 1px solid #e5eaf0;
+      border-radius: 17px;
+      background: #fafbfc;
+    }
+
+    .demo-box h3 {
+      font-size: 15px;
+      margin-bottom: 8px;
+    }
+
+    .demo-box p {
+      font-size: 13px;
+      color: #64748b;
+      line-height: 1.55;
+    }
+
+    @media (min-width: 700px) {
+      body {
+        padding: 30px 0;
+      }
+
+      .app {
+        min-height: calc(100vh - 60px);
+        border-radius: 24px;
+        box-shadow: 0 15px 50px rgba(15, 23, 42, 0.08);
+        overflow: hidden;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="app">
+
+  <header class="header">
+    <div class="brand">
+      <div class="logo">NKL</div>
+
+      <div>
+        <div class="brand-name">NKL Nakliye</div>
+        <div class="brand-sub">Nakliye Operasyon Merkezi</div>
+      </div>
+    </div>
+
+    <div class="status">● Aktif</div>
+  </header>
+
+
+  <!-- ANA SAYFA -->
+  <main id="homePage" class="page active">
+
+    <section class="hero">
+      <h1>Nakliyenizi kolayca yönetin.</h1>
+
+      <p>
+        Nakliye talebinizi oluşturun.
+        Aracınızı ve sevkiyat sürecinizi tek yerden takip edin.
+      </p>
+    </section>
+
+
+    <button class="main-action" onclick="openPage('quotePage')">
+      <div class="action-title">
+        <span>Fiyat Al</span>
+        <span class="arrow">→</span>
+      </div>
+
+      <div class="action-description">
+        Yük bilgilerinizi gönderin, nakliye fiyatınızı çalışalım.
+      </div>
+    </button>
+
+
+    <div class="secondary-grid">
+
+      <button class="secondary-action" onclick="openPage('trackingPage')">
+        <div class="icon">⌖</div>
+        <strong>Aracım Nerede?</strong>
+        <span>Aktif sevkiyatınızı takip edin.</span>
+      </button>
+
+
+      <button class="secondary-action" onclick="openPage('shipmentsPage')">
+        <div class="icon">≡</div>
+        <strong>Sevkiyatlarım</strong>
+        <span>Taşımalarınızı görüntüleyin.</span>
+      </button>
+
+    </div>
+
+
+    <div class="trust">
+      <strong>Tek muhatap, baştan sona takip.</strong><br>
+      Nakliye operasyonunuz boyunca ekibimiz yanınızda.
+    </div>
+
+  </main>
+
+
+
+  <!-- FİYAT AL -->
+  <main id="quotePage" class="page">
+
+    <button class="back" onclick="openPage('homePage')">
+      ← Ana sayfa
+    </button>
+
+    <div id="quoteForm">
+
+      <h2 class="form-title">Nakliye Fiyatı Al</h2>
+
+      <p class="form-subtitle">
+        Yükünüzle ilgili temel bilgileri girin.
+        Talebinizi inceleyip sizinle iletişime geçelim.
+      </p>
+
+
+      <div class="route">
+
+        <div class="field">
+          <label>Nereden?</label>
+          <input id="from" type="text" placeholder="Gebze">
+        </div>
+
+        <div class="field">
+          <label>Nereye?</label>
+          <input id="to" type="text" placeholder="Ankara">
+        </div>
+
+      </div>
+
+
+      <div class="field">
+        <label>Yük nedir?</label>
+        <input id="cargo" type="text" placeholder="Örn. paletli seramik">
+      </div>
+
+
+      <div class="field">
+        <label>Miktar / Tonaj</label>
+        <input id="amount" type="text" placeholder="Örn. 18 palet / 22 ton">
+      </div>
+
+
+      <div class="field">
+        <label>Araç tercihi</label>
+
+        <select id="vehicle">
+          <option value="">Seçiniz</option>
+          <option>Tır</option>
+          <option>Kamyon</option>
+          <option>Kamyonet</option>
+          <option>Parsiyel</option>
+          <option>Bilmiyorum</option>
+        </select>
+      </div>
+
+
+      <div class="field">
+        <label>Yükleme tarihi</label>
+        <input id="date" type="date">
+      </div>
+
+
+      <div class="field">
+        <label>Firma adı</label>
+        <input id="company" type="text" placeholder="Firma">
+      </div>
+
+
+      <div class="field">
+        <label>Telefon</label>
+        <input id="phone" type="tel" placeholder="05xx xxx xx xx">
+      </div>
+
+
+      <button class="submit" onclick="sendQuote()">
+        Fiyat Talebi Oluştur
+      </button>
+
+      <div class="small-note">
+        Talebiniz yalnızca nakliye fiyatlandırması ve operasyon
+        iletişimi amacıyla kullanılacaktır.
+      </div>
+
+    </div>
+
+
+    <div id="successBox" class="success">
+
+      <div class="success-icon">✓</div>
+
+      <h2>Talebiniz alındı.</h2>
+
+      <p>
+        Nakliye ekibimiz araç ve fiyat çalışmasını gerçekleştirerek
+        sizinle iletişime geçecektir.
+      </p>
+
+      <button
+        class="submit"
+        style="margin-top:28px;"
+        onclick="resetQuote()">
+        Yeni Talep Oluştur
+      </button>
+
+    </div>
+
+  </main>
+
+
+
+  <!-- ARACIM NEREDE -->
+  <main id="trackingPage" class="page">
+
+    <button class="back" onclick="openPage('homePage')">
+      ← Ana sayfa
+    </button>
+
+    <h2 class="form-title">Aracım Nerede?</h2>
+
+    <p class="form-subtitle">
+      Aktif sevkiyatınızın konum ve teslimat durumunu buradan takip edebilirsiniz.
+    </p>
+
+    <div class="demo-box">
+      <h3>Konum takibi hazırlanıyor</h3>
+      <p>
+        Araç takip sistemi ikinci aşamada aktif hale getirilecektir.
+      </p>
+    </div>
+
+  </main>
+
+
+
+  <!-- SEVKİYATLAR -->
+  <main id="shipmentsPage" class="page">
+
+    <button class="back" onclick="openPage('homePage')">
+      ← Ana sayfa
+    </button>
+
+    <h2 class="form-title">Sevkiyatlarım</h2>
+
+    <p class="form-subtitle">
+      Aktif ve tamamlanan sevkiyatlarınız burada görüntülenecektir.
+    </p>
+
+    <div class="demo-box">
+      <h3>Henüz aktif sevkiyat bulunmuyor.</h3>
+
+      <p>
+        Yeni bir nakliye talebi oluşturduğunuzda
+        operasyon bilgileri burada yer alacaktır.
+      </p>
+    </div>
+
+  </main>
+
+</div>
+
+
+<script>
+
+  function openPage(pageId) {
+
+    document.querySelectorAll(".page").forEach(page => {
+      page.classList.remove("active");
+    });
+
+    document.getElementById(pageId).classList.add("active");
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+  }
+
+
+  function sendQuote() {
+
+    const from = document.getElementById("from").value.trim();
+    const to = document.getElementById("to").value.trim();
+    const phone = document.getElementById("phone").value.trim();
+
+    if (!from || !to || !phone) {
+      alert("Lütfen yükleme yeri, teslim yeri ve telefon bilgilerini girin.");
+      return;
+    }
+
+    document.getElementById("quoteForm").style.display = "none";
+    document.getElementById("successBox").style.display = "block";
+  }
+
+
+  function resetQuote() {
+
+    document.querySelectorAll(
+      "#quotePage input, #quotePage select"
+    ).forEach(field => {
+      field.value = "";
+    });
+
+    document.getElementById("successBox").style.display = "none";
+    document.getElementById("quoteForm").style.display = "block";
+  }
+
+</script>
+
+</body>
+</html>
