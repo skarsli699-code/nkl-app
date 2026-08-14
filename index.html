@@ -117,11 +117,6 @@
       text-align: left;
       cursor: pointer;
       margin-bottom: 13px;
-      transition: 0.15s;
-    }
-
-    .main-action:active {
-      transform: scale(0.99);
     }
 
     .action-title {
@@ -134,7 +129,6 @@
 
     .arrow {
       font-size: 23px;
-      font-weight: 300;
     }
 
     .action-description {
@@ -239,11 +233,6 @@
       color: #0f172a;
     }
 
-    .field input:focus,
-    .field select:focus {
-      border-color: #64748b;
-    }
-
     .route {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -269,36 +258,6 @@
       font-size: 11px;
       margin-top: 13px;
       line-height: 1.5;
-    }
-
-    .success {
-      display: none;
-      text-align: center;
-      padding: 45px 10px 20px;
-    }
-
-    .success-icon {
-      width: 68px;
-      height: 68px;
-      border-radius: 50%;
-      background: #ecfdf5;
-      color: #15803d;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto 22px;
-      font-size: 30px;
-    }
-
-    .success h2 {
-      font-size: 24px;
-      margin-bottom: 10px;
-    }
-
-    .success p {
-      color: #64748b;
-      line-height: 1.6;
-      font-size: 14px;
     }
 
     .demo-box {
@@ -340,6 +299,7 @@
 <div class="app">
 
   <header class="header">
+
     <div class="brand">
       <div class="logo">NKL</div>
 
@@ -350,23 +310,28 @@
     </div>
 
     <div class="status">● Aktif</div>
+
   </header>
 
 
   <!-- ANA SAYFA -->
+
   <main id="homePage" class="page active">
 
     <section class="hero">
+
       <h1>Nakliyenizi kolayca yönetin.</h1>
 
       <p>
         Nakliye talebinizi oluşturun.
         Aracınızı ve sevkiyat sürecinizi tek yerden takip edin.
       </p>
+
     </section>
 
 
     <button class="main-action" onclick="openPage('quotePage')">
+
       <div class="action-title">
         <span>Fiyat Al</span>
         <span class="arrow">→</span>
@@ -375,30 +340,48 @@
       <div class="action-description">
         Yük bilgilerinizi gönderin, nakliye fiyatınızı çalışalım.
       </div>
+
     </button>
 
 
     <div class="secondary-grid">
 
       <button class="secondary-action" onclick="openPage('trackingPage')">
+
         <div class="icon">⌖</div>
+
         <strong>Aracım Nerede?</strong>
-        <span>Aktif sevkiyatınızı takip edin.</span>
+
+        <span>
+          Aktif sevkiyatınızı takip edin.
+        </span>
+
       </button>
 
 
       <button class="secondary-action" onclick="openPage('shipmentsPage')">
+
         <div class="icon">≡</div>
+
         <strong>Sevkiyatlarım</strong>
-        <span>Taşımalarınızı görüntüleyin.</span>
+
+        <span>
+          Taşımalarınızı görüntüleyin.
+        </span>
+
       </button>
 
     </div>
 
 
     <div class="trust">
-      <strong>Tek muhatap, baştan sona takip.</strong><br>
+
+      <strong>Tek muhatap, baştan sona takip.</strong>
+
+      <br>
+
       Nakliye operasyonunuz boyunca ekibimiz yanınızda.
+
     </div>
 
   </main>
@@ -406,110 +389,149 @@
 
 
   <!-- FİYAT AL -->
+
   <main id="quotePage" class="page">
 
     <button class="back" onclick="openPage('homePage')">
       ← Ana sayfa
     </button>
 
-    <div id="quoteForm">
 
-      <h2 class="form-title">Nakliye Fiyatı Al</h2>
+    <h2 class="form-title">
+      Nakliye Fiyatı Al
+    </h2>
 
-      <p class="form-subtitle">
-        Yükünüzle ilgili temel bilgileri girin.
-        Talebinizi inceleyip sizinle iletişime geçelim.
-      </p>
+    <p class="form-subtitle">
+      Yükünüzle ilgili temel bilgileri girin.
+      Talebinizi WhatsApp üzerinden bize iletin.
+    </p>
 
 
-      <div class="route">
+    <div class="route">
 
-        <div class="field">
-          <label>Nereden?</label>
-          <input id="from" type="text" placeholder="Gebze">
-        </div>
+      <div class="field">
 
-        <div class="field">
-          <label>Nereye?</label>
-          <input id="to" type="text" placeholder="Ankara">
-        </div>
+        <label>Nereden?</label>
+
+        <input
+          id="from"
+          type="text"
+          placeholder="Örn. Gebze">
 
       </div>
 
 
       <div class="field">
-        <label>Yük nedir?</label>
-        <input id="cargo" type="text" placeholder="Örn. paletli seramik">
-      </div>
 
+        <label>Nereye?</label>
 
-      <div class="field">
-        <label>Miktar / Tonaj</label>
-        <input id="amount" type="text" placeholder="Örn. 18 palet / 22 ton">
-      </div>
+        <input
+          id="to"
+          type="text"
+          placeholder="Örn. Ankara">
 
-
-      <div class="field">
-        <label>Araç tercihi</label>
-
-        <select id="vehicle">
-          <option value="">Seçiniz</option>
-          <option>Tır</option>
-          <option>Kamyon</option>
-          <option>Kamyonet</option>
-          <option>Parsiyel</option>
-          <option>Bilmiyorum</option>
-        </select>
-      </div>
-
-
-      <div class="field">
-        <label>Yükleme tarihi</label>
-        <input id="date" type="date">
-      </div>
-
-
-      <div class="field">
-        <label>Firma adı</label>
-        <input id="company" type="text" placeholder="Firma">
-      </div>
-
-
-      <div class="field">
-        <label>Telefon</label>
-        <input id="phone" type="tel" placeholder="05xx xxx xx xx">
-      </div>
-
-
-      <button class="submit" onclick="sendQuote()">
-        Fiyat Talebi Oluştur
-      </button>
-
-      <div class="small-note">
-        Talebiniz yalnızca nakliye fiyatlandırması ve operasyon
-        iletişimi amacıyla kullanılacaktır.
       </div>
 
     </div>
 
 
-    <div id="successBox" class="success">
+    <div class="field">
 
-      <div class="success-icon">✓</div>
+      <label>Yük nedir?</label>
 
-      <h2>Talebiniz alındı.</h2>
+      <input
+        id="cargo"
+        type="text"
+        placeholder="Örn. Paletli seramik">
 
-      <p>
-        Nakliye ekibimiz araç ve fiyat çalışmasını gerçekleştirerek
-        sizinle iletişime geçecektir.
-      </p>
+    </div>
 
-      <button
-        class="submit"
-        style="margin-top:28px;"
-        onclick="resetQuote()">
-        Yeni Talep Oluştur
-      </button>
+
+    <div class="field">
+
+      <label>Miktar / Tonaj</label>
+
+      <input
+        id="amount"
+        type="text"
+        placeholder="Örn. 18 palet / 22 ton">
+
+    </div>
+
+
+    <div class="field">
+
+      <label>Araç tercihi</label>
+
+      <select id="vehicle">
+
+        <option value="">
+          Seçiniz
+        </option>
+
+        <option>Tır</option>
+
+        <option>Kamyon</option>
+
+        <option>Kamyonet</option>
+
+        <option>Parsiyel</option>
+
+        <option>Bilmiyorum</option>
+
+      </select>
+
+    </div>
+
+
+    <div class="field">
+
+      <label>Yükleme tarihi</label>
+
+      <input
+        id="date"
+        type="date">
+
+    </div>
+
+
+    <div class="field">
+
+      <label>Firma adı</label>
+
+      <input
+        id="company"
+        type="text"
+        placeholder="Firma adı">
+
+    </div>
+
+
+    <div class="field">
+
+      <label>Telefon</label>
+
+      <input
+        id="phone"
+        type="tel"
+        placeholder="05xx xxx xx xx">
+
+    </div>
+
+
+    <button
+      class="submit"
+      onclick="sendQuote()">
+
+      WhatsApp'tan Fiyat İste
+
+    </button>
+
+
+    <div class="small-note">
+
+      Talebiniz nakliye fiyatlandırması ve operasyon
+      iletişimi amacıyla kullanılacaktır.
 
     </div>
 
@@ -518,23 +540,41 @@
 
 
   <!-- ARACIM NEREDE -->
+
   <main id="trackingPage" class="page">
 
-    <button class="back" onclick="openPage('homePage')">
+    <button
+      class="back"
+      onclick="openPage('homePage')">
+
       ← Ana sayfa
+
     </button>
 
-    <h2 class="form-title">Aracım Nerede?</h2>
+
+    <h2 class="form-title">
+      Aracım Nerede?
+    </h2>
+
 
     <p class="form-subtitle">
-      Aktif sevkiyatınızın konum ve teslimat durumunu buradan takip edebilirsiniz.
+
+      Aktif sevkiyatınızın konum ve teslimat durumunu
+      buradan takip edebilirsiniz.
+
     </p>
 
+
     <div class="demo-box">
-      <h3>Konum takibi hazırlanıyor</h3>
+
+      <h3>
+        Konum takibi hazırlanıyor
+      </h3>
+
       <p>
-        Araç takip sistemi ikinci aşamada aktif hale getirilecektir.
+        Araç takip sistemi aktif sevkiyatlarda kullanılacaktır.
       </p>
+
     </div>
 
   </main>
@@ -542,25 +582,44 @@
 
 
   <!-- SEVKİYATLAR -->
+
   <main id="shipmentsPage" class="page">
 
-    <button class="back" onclick="openPage('homePage')">
+    <button
+      class="back"
+      onclick="openPage('homePage')">
+
       ← Ana sayfa
+
     </button>
 
-    <h2 class="form-title">Sevkiyatlarım</h2>
+
+    <h2 class="form-title">
+      Sevkiyatlarım
+    </h2>
+
 
     <p class="form-subtitle">
-      Aktif ve tamamlanan sevkiyatlarınız burada görüntülenecektir.
+
+      Aktif ve tamamlanan sevkiyatlarınız
+      burada görüntülenecektir.
+
     </p>
 
+
     <div class="demo-box">
-      <h3>Henüz aktif sevkiyat bulunmuyor.</h3>
+
+      <h3>
+        Henüz aktif sevkiyat bulunmuyor.
+      </h3>
 
       <p>
+
         Yeni bir nakliye talebi oluşturduğunuzda
         operasyon bilgileri burada yer alacaktır.
+
       </p>
+
     </div>
 
   </main>
@@ -568,49 +627,113 @@
 </div>
 
 
+
 <script>
+
+  const whatsappNumber = "905377026799";
+
 
   function openPage(pageId) {
 
-    document.querySelectorAll(".page").forEach(page => {
-      page.classList.remove("active");
-    });
+    document
+      .querySelectorAll(".page")
+      .forEach(page => {
 
-    document.getElementById(pageId).classList.add("active");
+        page.classList.remove("active");
+
+      });
+
+
+    document
+      .getElementById(pageId)
+      .classList.add("active");
+
 
     window.scrollTo({
+
       top: 0,
+
       behavior: "smooth"
+
     });
+
   }
+
 
 
   function sendQuote() {
 
-    const from = document.getElementById("from").value.trim();
-    const to = document.getElementById("to").value.trim();
-    const phone = document.getElementById("phone").value.trim();
+    const from =
+      document.getElementById("from").value.trim();
+
+    const to =
+      document.getElementById("to").value.trim();
+
+    const cargo =
+      document.getElementById("cargo").value.trim();
+
+    const amount =
+      document.getElementById("amount").value.trim();
+
+    const vehicle =
+      document.getElementById("vehicle").value;
+
+    const date =
+      document.getElementById("date").value;
+
+    const company =
+      document.getElementById("company").value.trim();
+
+    const phone =
+      document.getElementById("phone").value.trim();
+
+
 
     if (!from || !to || !phone) {
-      alert("Lütfen yükleme yeri, teslim yeri ve telefon bilgilerini girin.");
+
+      alert(
+        "Lütfen yükleme yeri, teslim yeri ve telefon bilgilerini girin."
+      );
+
       return;
+
     }
 
-    document.getElementById("quoteForm").style.display = "none";
-    document.getElementById("successBox").style.display = "block";
-  }
 
 
-  function resetQuote() {
+    const message =
 
-    document.querySelectorAll(
-      "#quotePage input, #quotePage select"
-    ).forEach(field => {
-      field.value = "";
-    });
+`🚚 YENİ NAKLİYE TALEBİ
 
-    document.getElementById("successBox").style.display = "none";
-    document.getElementById("quoteForm").style.display = "block";
+📍 Nereden: ${from}
+📍 Nereye: ${to}
+
+📦 Yük: ${cargo || "Belirtilmedi"}
+⚖️ Miktar / Tonaj: ${amount || "Belirtilmedi"}
+🚛 Araç: ${vehicle || "Belirtilmedi"}
+📅 Yükleme: ${date || "Belirtilmedi"}
+
+🏢 Firma: ${company || "Belirtilmedi"}
+📞 Telefon: ${phone}
+
+Nakliye fiyat bilgisi rica ediyorum.`;
+
+
+
+    const whatsappURL =
+
+      "https://wa.me/" +
+      whatsappNumber +
+      "?text=" +
+      encodeURIComponent(message);
+
+
+
+    window.open(
+      whatsappURL,
+      "_blank"
+    );
+
   }
 
 </script>
