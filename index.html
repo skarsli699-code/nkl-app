@@ -567,15 +567,23 @@
 
     <div class="demo-box">
 
-      <h3>
-        Konum takibi hazırlanıyor
-      </h3>
+  <div class="field">
+    <label>Telefon numaranız</label>
+    <input
+      id="trackingPhone"
+      type="tel"
+      placeholder="05xx xxx xx xx">
+  </div>
 
-      <p>
-        Araç takip sistemi aktif sevkiyatlarda kullanılacaktır.
-      </p>
+  <button
+    class="submit"
+    onclick="loadTracking()">
+    Aracımı Bul
+  </button>
 
-    </div>
+  <div id="trackingResults" style="margin-top:16px;"></div>
+
+</div>
 
   </main>
 
@@ -822,6 +830,84 @@ async function loadShipments() {
   } catch (error) {
     results.textContent =
       "Sevkiyat bilgileri alınamadı. Lütfen tekrar deneyin.";
+  }
+}
+  async function loadTracking() {
+  const phone = document
+    .getElementById("trackingPhone")
+    .value
+    .replace(/\D/g, "");
+
+  const results = document.getElementById("trackingResults");
+
+  if (!phone) {
+    results.textContent = "Lütfen telefon numaranızı girin.";
+    return;
+  }
+
+  results.textContent = "Araç bilgisi yükleniyor...";
+
+  try {
+    const response = await fetch(
+      sheetWebAppURL + "?phone=" + encodeURIComponent(phone)
+    );
+
+    const rows = await response.json();
+
+    if (!Array.isArray(rows) || rows.length === 0) {
+      results.textContent =
+        "Bu telefon numarasına ait aktif sevkiyat bulunamadı.";
+      return;
+    }
+
+    const row =
+      [...rows].reverse().find(r => r["Durum"] !== "Teslim Edildi")
+      || rows[rows.length - 1];
+
+    const from = escapeHTML(row["Nereden"] || "-");
+    const to = escapeHTML(row["Nereye"] || "-");
+    const status = escapeHTML(row["Durum"] || "-");
+    const plate = escapeHTML(row["Plaka"] || "-");
+    const location = escapeHTML(row["Araç Konumu"] || "Konum henüz girilmedi");
+    const updated = escapeHTML(row["Son Güncelleme"] || "-");
+    const mapLink = String(row["Harita Linki"] || "");
+
+    const mapButton = mapLink.startsWith("http")
+      ? `
+        <a href="${escapeHTML(mapLink)}"
+           target="_blank"
+           style="
+             display:block;
+             margin-top:16px;
+             padding:14px;
+             background:#0f172a;
+             color:white;
+             text-align:center;
+             text-decoration:none;
+             border-radius:12px;
+             font-weight:700;
+           ">
+          Haritada Gör
+        </a>
+      `
+      : "";
+
+    results.innerHTML = `
+      <div style="line-height:1.8;">
+        <strong>${from} → ${to}</strong><br><br>
+
+        <b>Durum:</b> ${status}<br>
+        <b>Plaka:</b> ${plate}<br>
+        <b>Son Konum:</b> ${location}<br>
+        <b>Son Güncelleme:</b> ${updated}
+
+        ${mapButton}
+      </div>
+    `;
+
+  } catch (error) {
+    results.textContent =
+      "Araç bilgisi alınamadı. Lütfen tekrar deneyin.";
   }
 }
 </script>
