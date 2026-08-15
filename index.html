@@ -609,18 +609,23 @@
 
     <div class="demo-box">
 
-      <h3>
-        Henüz aktif sevkiyat bulunmuyor.
-      </h3>
+  <div class="field">
+    <label>Telefon numaranız</label>
+    <input
+      id="shipmentPhone"
+      type="tel"
+      placeholder="05xx xxx xx xx">
+  </div>
 
-      <p>
+  <button
+    class="submit"
+    onclick="loadShipments()">
+    Sevkiyatlarımı Göster
+  </button>
 
-        Yeni bir nakliye talebi oluşturduğunuzda
-        operasyon bilgileri burada yer alacaktır.
+  <div id="shipmentResults" style="margin-top:16px;"></div>
 
-      </p>
-
-    </div>
+</div>
 
   </main>
 
@@ -715,7 +720,110 @@ Nakliye fiyat bilgisi rica ediyorum.`;
 
   window.open(whatsappURL, "_blank");
 }
+function escapeHTML(value) {
+  return String(value ?? "").replace(/[&<>"']/g, char => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#039;"
+  }[char]));
+}
 
+function formatDateTR(value) {
+  if (!value) return "-";
+
+  const date = new Date(value);
+
+  if (isNaN(date.getTime())) return escapeHTML(value);
+
+  return date.toLocaleDateString("tr-TR");
+}
+
+async function loadShipments() {
+  const phone = document
+    .getElementById("shipmentPhone")
+    .value
+    .replace(/\D/g, "");
+
+  const results = document.getElementById("shipmentResults");
+
+  if (!phone) {
+    results.textContent = "Lütfen telefon numaranızı girin.";
+    return;
+  }
+
+  results.textContent = "Sevkiyatlar yükleniyor...";
+
+  try {
+    const response = await fetch(
+      sheetWebAppURL + "?phone=" + encodeURIComponent(phone)
+    );
+
+    if (!response.ok) {
+      throw new Error("Bağlantı hatası");
+    }
+
+    const rows = await response.json();
+
+    if (!Array.isArray(rows) || rows.length === 0) {
+      results.innerHTML =
+        "<p>Bu telefon numarasına ait sevkiyat bulunamadı.</p>";
+      return;
+    }
+
+    results.innerHTML = rows.reverse().map(row => {
+
+      const talepNo = escapeHTML(row["Talep No"] || "");
+      const from = escapeHTML(row["Nereden"] || "-");
+      const to = escapeHTML(row["Nereye"] || "-");
+      const cargo = escapeHTML(row["Yük"] || "-");
+      const amount = escapeHTML(row["Miktar"] || "-");
+      const vehicle = escapeHTML(row["Araç"] || "-");
+      const status = escapeHTML(row["Durum"] || "Yeni Talep");
+      const quote = escapeHTML(row["Teklif"] || "");
+      const plate = escapeHTML(row["Plaka"] || "");
+      const loadingDate = formatDateTR(row["Yükleme Tarihi"]);
+
+      return `
+        <div style="
+          padding:16px 0;
+          border-bottom:1px solid #e5eaf0;
+        ">
+
+          <div style="
+            display:flex;
+            justify-content:space-between;
+            gap:12px;
+          ">
+            <strong>${from} → ${to}</strong>
+            <strong style="font-size:12px;">${status}</strong>
+          </div>
+
+          <div style="
+            margin-top:9px;
+            font-size:13px;
+            line-height:1.7;
+            color:#64748b;
+          ">
+            ${talepNo ? "Talep: " + talepNo + "<br>" : ""}
+            Yük: ${cargo}<br>
+            Miktar: ${amount}<br>
+            Araç: ${vehicle}<br>
+            Yükleme: ${loadingDate}
+            ${quote ? "<br>Teklif: " + quote : ""}
+            ${plate ? "<br>Plaka: " + plate : ""}
+          </div>
+
+        </div>
+      `;
+    }).join("");
+
+  } catch (error) {
+    results.textContent =
+      "Sevkiyat bilgileri alınamadı. Lütfen tekrar deneyin.";
+  }
+}
 </script>
 </body>
 </html>
