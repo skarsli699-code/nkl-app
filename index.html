@@ -792,7 +792,33 @@ async function loadShipments() {
       const quote = escapeHTML(row["Teklif"] || "");
       const plate = escapeHTML(row["Plaka"] || "");
       const loadingDate = formatDateTR(row["Yükleme Tarihi"]);
+const approvalMessage = quote
+  ? encodeURIComponent(
+      `Merhaba, ${row["Talep No"] ? row["Talep No"] + " numaralı " : ""}${row["Nereden"] || "-"} → ${row["Nereye"] || "-"} nakliye teklifinizi (${row["Teklif"]}) onaylıyorum.`
+    )
+  : "";
 
+const approvalButton = quote
+  ? `
+    <a
+      href="https://wa.me/${whatsappNumber}?text=${approvalMessage}"
+      target="_blank"
+      style="
+        display:block;
+        margin-top:14px;
+        padding:13px;
+        background:#0f172a;
+        color:white;
+        text-align:center;
+        text-decoration:none;
+        border-radius:12px;
+        font-weight:700;
+      "
+    >
+      Teklifi Onayla
+    </a>
+  `
+  : "";
       return `
         <div style="
           padding:16px 0;
@@ -821,6 +847,7 @@ async function loadShipments() {
             Yükleme: ${loadingDate}
             ${quote ? "<br>Teklif: " + quote : ""}
             ${plate ? "<br>Plaka: " + plate : ""}
+            ${approvalButton}
           </div>
 
         </div>
