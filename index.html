@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#0f172a">
 
-  <title>NKL | Nakliye</title>
+  <title>Nöbetçi Lojistik | Nakliye</title>
 
   <style>
     * {
@@ -51,7 +51,7 @@
       width: 42px;
       height: 42px;
       border-radius: 13px;
-      background: #0f172a;
+      background: #dc2626;
       color: white;
       display: flex;
       align-items: center;
@@ -304,7 +304,7 @@
       <div class="logo">NKL</div>
 
       <div>
-        <div class="brand-name">NKL Nakliye</div>
+        <div class="brand-name">Nöbetçi Lojistik</div>
         <div class="brand-sub">Nakliye Operasyon Merkezi</div>
       </div>
     </div>
@@ -323,7 +323,7 @@
       <h1>Nakliyenizi kolayca yönetin.</h1>
 
       <p>
-        Nakliye talebinizi oluşturun.
+        Hızlı fiyat alın.
         Aracınızı ve sevkiyat sürecinizi tek yerden takip edin.
       </p>
 
@@ -705,18 +705,18 @@ function sendQuote() {
   // WHATSAPP MESAJI
 
   const message =
-`🚚 YENİ NAKLİYE TALEBİ
+`YENİ NAKLİYE TALEBİ
 
-📍 Nereden: ${from}
-📍 Nereye: ${to}
+Nereden: ${from}
+Nereye: ${to}
 
-📦 Yük: ${cargo || "Belirtilmedi"}
-⚖️ Miktar / Tonaj: ${amount || "Belirtilmedi"}
-🚛 Araç: ${vehicle || "Belirtilmedi"}
-📅 Yükleme: ${date || "Belirtilmedi"}
+Yük: ${cargo || "Belirtilmedi"}
+Miktar / Tonaj: ${amount || "Belirtilmedi"}
+Araç: ${vehicle || "Belirtilmedi"}
+Yükleme: ${date || "Belirtilmedi"}
 
-🏢 Firma: ${company || "Belirtilmedi"}
-📞 Telefon: ${phone}
+Firma: ${company || "Belirtilmedi"}
+Telefon: ${phone}
 
 Nakliye fiyat bilgisi rica ediyorum.`;
 
@@ -737,7 +737,25 @@ function escapeHTML(value) {
     "'": "&#039;"
   }[char]));
 }
+function formatPriceTR(value) {
+  const raw = String(value ?? "").trim();
 
+  if (!raw) return "";
+
+  if (/₺|\bTL\b/i.test(raw)) {
+    return raw;
+  }
+
+  const number = Number(
+    raw.replace(/\./g, "").replace(",", ".")
+  );
+
+  if (Number.isFinite(number)) {
+    return number.toLocaleString("tr-TR") + " ₺";
+  }
+
+  return raw + " ₺";
+}
 function formatDateTR(value) {
   if (!value) return "-";
 
@@ -789,12 +807,12 @@ async function loadShipments() {
       const amount = escapeHTML(row["Miktar"] || "-");
       const vehicle = escapeHTML(row["Araç"] || "-");
       const status = escapeHTML(row["Durum"] || "Yeni Talep");
-      const quote = escapeHTML(row["Teklif"] || "");
+      const quote = escapeHTML(formatPriceTR(row["Teklif"]));
       const plate = escapeHTML(row["Plaka"] || "");
       const loadingDate = formatDateTR(row["Yükleme Tarihi"]);
 const approvalMessage = quote
   ? encodeURIComponent(
-      `Merhaba, ${row["Talep No"] ? row["Talep No"] + " numaralı " : ""}${row["Nereden"] || "-"} → ${row["Nereye"] || "-"} nakliye teklifinizi (${row["Teklif"]}) onaylıyorum.`
+      `Merhaba, ${row["Talep No"] ? row["Talep No"] + " numaralı " : ""}${row["Nereden"] || "-"} → ${row["Nereye"] || "-"} nakliye teklifinizi (${formatPriceTR(row["Teklif"])}) onaylıyorum.`
     )
   : "";
 
