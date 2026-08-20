@@ -5,6 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="theme-color" content="#0b1422">
   <title>Nöbetçi Lojistik | Nakliye</title>
+
+  <link rel="manifest" href="/manifest.json">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Nöbetçi">
+
   <meta name="description" content="Nakliye fiyatı alın, sevkiyatınızı ve aracınızı tek yerden takip edin. Nöbetçi Lojistik 7/24 ulaşılabilir.">
 
   <style>
@@ -585,7 +592,15 @@
         display:none;
       }
     }
-  </style>
+  
+    .install-tip{display:none;margin-top:11px;background:rgba(255,255,255,.91);border:1px solid rgba(255,255,255,.62);backdrop-filter:blur(16px);border-radius:18px;padding:12px 13px;box-shadow:var(--shadow);align-items:center;justify-content:space-between;gap:10px}
+    .install-tip.show-install{display:flex}.install-tip strong{display:block;font-size:11px}.install-tip span{display:block;font-size:9px;color:#667085;margin-top:3px;line-height:1.4}
+    .install-tip button{flex:0 0 auto;border:0;border-radius:12px;background:#0b1422;color:#fff;min-height:38px;padding:0 11px;font-size:10px;font-weight:900;cursor:pointer}
+    .ios-sheet{display:none;position:fixed;inset:0;z-index:100;background:rgba(8,16,28,.55);align-items:flex-end;justify-content:center;padding:14px}
+    .ios-sheet.open{display:flex}.ios-card{width:min(100%,540px);background:#fff;border-radius:22px;padding:18px;box-shadow:0 20px 55px rgba(0,0,0,.28)}
+    .ios-card h3{font-size:16px}.ios-card p{margin-top:8px;color:#667085;font-size:12px;line-height:1.55}.ios-card button{width:100%;margin-top:14px;height:46px;border:0;border-radius:14px;background:#0b1422;color:#fff;font-weight:900;cursor:pointer}
+
+</style>
 </head>
 
 <body>
@@ -643,7 +658,13 @@
       </div>
     </section>
 
-    <div class="section-title">Takip</div>
+    
+    <div id="installTip" class="install-tip">
+      <div><strong>Nöbetçi'yi ana ekrana ekleyin</strong><span>Bir sonraki sevkiyatta uygulama gibi tek dokunuşla açın.</span></div>
+      <button id="installBtn" type="button">Ana Ekrana Ekle</button>
+    </div>
+
+<div class="section-title">Takip</div>
 
     <div class="menu-grid">
       <button class="menu-card" onclick="openPage('trackingPage')">
@@ -782,7 +803,16 @@
     </svg>
   </a>
 
-  <nav class="bottom-nav">
+  
+  <div id="iosSheet" class="ios-sheet" aria-hidden="true">
+    <div class="ios-card">
+      <h3>Ana ekrana ekleyin</h3>
+      <p>Safari'de <b>Paylaş</b> simgesine dokunun, ardından <b>Ana Ekrana Ekle</b> seçeneğini seçin. Sonrasında Nöbetçi uygulama gibi açılır.</p>
+      <button id="closeIos" type="button">Tamam</button>
+    </div>
+  </div>
+
+<nav class="bottom-nav">
     <button class="nav-btn selected" data-page="homePage" onclick="openPage('homePage')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <path d="m3 10 9-7 9 7"/><path d="M5 9v11h14V9"/>
@@ -1133,6 +1163,28 @@ async function loadTracking() {
       "Araç bilgisi alınamadı. Lütfen tekrar deneyin.";
   }
 }
+
+let deferredInstallPrompt=null;
+function isStandaloneMode(){return window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone===true;}
+function isIOSDevice(){return /iphone|ipad|ipod/i.test(window.navigator.userAgent);}
+function setupInstallPrompt(){
+  const tip=document.getElementById('installTip'),btn=document.getElementById('installBtn'),sheet=document.getElementById('iosSheet'),closeBtn=document.getElementById('closeIos');
+  if(!tip||!btn||isStandaloneMode()) return;
+  if(isIOSDevice()){
+    tip.classList.add('show-install');
+    btn.addEventListener('click',()=>sheet.classList.add('open'));
+    closeBtn.addEventListener('click',()=>sheet.classList.remove('open'));
+    sheet.addEventListener('click',e=>{if(e.target===sheet)sheet.classList.remove('open');});
+  }
+  window.addEventListener('beforeinstallprompt',e=>{
+    e.preventDefault(); deferredInstallPrompt=e; tip.classList.add('show-install');
+    btn.onclick=async()=>{if(!deferredInstallPrompt)return;deferredInstallPrompt.prompt();await deferredInstallPrompt.userChoice;deferredInstallPrompt=null;tip.classList.remove('show-install');};
+  });
+  window.addEventListener('appinstalled',()=>tip.classList.remove('show-install'));
+}
+if('serviceWorker' in navigator){window.addEventListener('load',()=>{navigator.serviceWorker.register('/sw.js').catch(()=>{});setupInstallPrompt();});}
+else{window.addEventListener('load',setupInstallPrompt);}
+
 </script>
 </body>
 </html>
